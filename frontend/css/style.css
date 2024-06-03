@@ -1,0 +1,953 @@
+/* стартовый сброс */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+/* подключение шрифтов */
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-SemiBold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-Bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* основные цвета сайта */
+
+:root {
+  --green: #34C759;
+  --orange: #E6B127;
+  --red: #F06A4D;
+  --firm: #9873FF;
+  --grey: #C8C5D1;
+  --tex-grey: #B0B0B0;
+  --black: #333333;
+  --bacground: #E5E5E5;
+}
+
+/* стандартные стили для body */
+
+.page {
+  font-family: 'OpenSans', sans-serif;
+  font-weight: 400;
+  min-width: 320px;
+  background: var(--bacground);
+}
+
+.container {
+  max-width: 1400px; /* поменять на max-width */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn {
+  display: inline-block; /* чтобы высота элементов была одинаковая */
+  padding: 13px 27px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--firm);
+  border: 1px solid var(--firm);
+  border-radius: none;
+  background: none;
+  cursor: pointer;
+}
+
+
+/* сброс стилей у списка */
+
+.list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* header */
+.header {
+  margin-bottom: 40px;
+}
+
+.header__container {
+  padding: 20px 20px;
+  background: white;
+  box-shadow: 0 3px 6px 0 rgba(176, 190, 197, 0.32), 0 9px 27px 0 rgba(176, 190, 197, 0.32);
+}
+
+.header__logo {
+  margin-right: 53px;
+}
+
+.header__search--input {
+  padding: 10px 16px;
+  border: 1px solid var(--tex-grey);
+  width: 581px;
+  height: 46px;
+  font-size: 14px;
+}
+
+/* clients */
+
+.clients__container {
+  padding: 0 90px;
+  margin-bottom: 40px;
+}
+
+.clients__list {
+  padding: 0 auto;
+}
+
+.clients__title {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.clients__table {
+  padding: 0 15px;
+}
+
+.clients__table--header {
+  flex-shrink: 0;
+  padding: 5px 10px 11px 10px;
+  font-size: 12px;
+  color: var(--tex-grey);
+  align-items: flex-end;
+}
+
+.clients__table--header--arrow {
+  margin: 0;
+  margin-right: 3px;
+  margin-bottom: -3px;
+}
+
+.client__list {
+  margin: 0;
+  margin-bottom: 40px;
+  background: white;
+}
+
+.client__button {
+  border-radius: none;
+}
+
+.client__btn {
+  align-items: center;
+  justify-content: center;
+}
+
+.studentsItem {
+  margin-bottom: 40px;
+}
+
+.btn__delete,
+.btn__changes {
+  padding: 0;
+  border:none;
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+}
+
+.btn__cancel,
+.btn__del {
+  padding: 0;
+  border:none;
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+  text-decoration:underline;
+}
+
+/* Скрытие модального окна по умолчанию */
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  padding: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 450px;
+  min-height: 400px;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+}
+
+.close,
+.closeChange {
+  position: absolute;
+  top: 15px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.modal__group {
+  padding: 10px;
+}
+
+.modal__header {
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+
+.modal__title {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.title__id {
+  font-size: 12px;
+  color: var(--tex-grey);
+  align-items: flex-end;
+}
+
+.modal__header--title {
+  align-items: flex-end;
+}
+
+.header__title {
+  margin: 0;
+  margin-right: 9px;
+}
+
+.form__placeholder {
+  font-size: 14px;
+  color: var(--tex-grey);
+}
+
+.form__placeholder--surname {
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  top: 90px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease-in-out;
+}
+
+.form__placeholder--surname.active {
+  top: 75px;
+  font-size: 10px;
+}
+
+.form__placeholder--name {
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  top: 145px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease-in-out;
+}
+
+.form__placeholder--name.active {
+  top: 130px;
+  font-size: 10px;
+}
+
+.form__placeholder--lastname {
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  top: 200px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease-in-out;
+}
+
+.form__placeholder--lastname.active {
+  top: 185px;
+  font-size: 10px;
+}
+
+.form__star {
+  color: var(--firm);
+}
+
+.modal__form {
+  margin-bottom: 32px;
+  padding-bottom: 5px;
+  width: 100%;
+  font-size: 14px;
+  color: var(--tex-grey);
+  border: none;
+  border-bottom: 1px solid var(--grey);
+}
+
+.modal__form--lastname {
+  margin-bottom: 25px;
+}
+
+.modal__btn {
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__add {
+  margin: 0 -30px 25px -30px;
+  padding: 10px 25px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--bacground);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.modal__add--indent {
+  padding: 25px 30px;
+}
+
+.btn__save,
+.delete__button {
+  padding: 13px 33px;
+  margin-bottom: 10px;
+  color: white;
+  background: var(--firm);
+  border: none;
+}
+
+.btn__del {
+  padding: 0;
+  border: none;
+  font-size: 12px;
+  font-weight: 400;
+  color: black;
+}
+
+.modal__svg {
+  margin-right: 4px;
+}
+
+.modal__cancellation,
+.modal__delete {
+  justify-content: center;
+  align-items: center;
+}
+
+.input__surname,
+.input__name {
+  position: relative;
+}
+
+.input__surname::before {
+  content: "*";
+  position: absolute;
+  left: 70px;
+  top: 24%;
+  transform: translateY(-50%);
+  color: var(--firm); /* Цвет звездочки */
+  pointer-events: none; /* Чтобы звездочка не мешала вводу текста */
+}
+
+.input__name::before {
+  content: "*";
+  position: absolute;
+  left: 35px;
+  top: 24%;
+  transform: translateY(-50%);
+  color: var(--firm); /* Цвет звездочки */
+  pointer-events: none; /* Чтобы звездочка не мешала вводу текста */
+}
+
+
+.modal__form.required {
+  padding-right: 20px; /* Добавляем отступ справа для псевдоэлемента */
+  padding-left: 5px; /* Учитываем место под звездочку */
+}
+
+.addForm {
+  width: 450px;
+  background: white;
+}
+
+.client__cell {
+  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  font-size: 14px;
+  background: white;
+  border-bottom: 1px solid var(--grey);
+}
+
+.client__button {
+ justify-content: space-between;
+}
+
+.changes-icon,
+.delete-icon {
+  vertical-align: middle; /* Выравнивание SVG по вертикали посредством базовой линии текста */
+  margin-right: 1px; /* Отступ между SVG и текстом */
+}
+
+.btn__changes,
+.btn__delete {
+  width: auto; /* Автоматическая ширина кнопки */
+  white-space: nowrap; /* Запрет переноса текста на новую строку */
+  transition: color 0.3s ease-in-out;
+}
+
+.btn__changes {
+  margin-right: 5px;
+}
+
+.client__id {
+  font-size: 12px;
+  color: var(--tex-grey)
+}
+
+.client__fullName {
+  font-size: 14px;
+  color: var(--black);
+}
+
+.time {
+  margin-left: 10px;
+  color: var(--tex-grey);
+}
+
+
+/* стили для таблицы студентов */
+.list__row {
+  padding: 0;
+  display: flex;
+  /* justify-content: center; */
+}
+
+.list__id {
+  width: 110px;
+}
+
+.list__fullname {
+  width: 350px;
+}
+
+.list__datecreate {
+  width: 175px;
+}
+
+.list__datechange {
+  width: 175px;
+}
+
+.list__contact {
+  width: 160px;
+}
+
+.list__active {
+  width: 215px;
+}
+
+/* стили для анимации стрелочки */
+
+.id__arrow-icon,
+.fullname__arrow-icon,
+.datecreate__arrow-icon,
+.datechange__arrow-icon{
+  fill: var(--firm);
+  opacity: 0.7;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.desc.id__arrow-icon {
+  transform: rotate(180deg);
+}
+
+.desc.fullname__arrow-icon {
+  transform: rotate(180deg);
+}
+
+.desc.datecreate__arrow-icon {
+  transform: rotate(180deg);
+}
+
+.desc.datechange__arrow-icon {
+  transform: rotate(180deg);
+}
+
+.datechange__arrow-icon{
+  transition: transform 0.3s ease-in-out;
+}
+
+.sort__button {
+  cursor: pointer;
+  transition:  color 0.3s ease-in-out;
+}
+
+.sort__button:hover {
+  color: var(--black)
+}
+
+.sort__button:hover svg {
+  opacity: 1;
+}
+
+.message {
+  align-items: center;
+  justify-content: center;
+}
+
+.no-result__message {
+  padding: 10px;
+  display: none;
+  width: 983px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--red);
+}
+
+.studentsItem__container {
+  align-items: center;
+ /* justify-content: center; */
+}
+
+/*
+.studentsItem__wrapper {
+  min-height: 300px;
+  max-width: 983px;
+  background-color: white;
+}
+*/
+
+.add__contact {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  display: flex;
+  padding-left: 8px; /* Отступ для текста */
+}
+
+.contact {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  width: 265px;
+  height: 40px;
+  font-size: 14px;
+  color: var(--black);
+  border: 1px solid var(--tex-grey);
+  border-right: none;
+  background: var(--bacground);
+}
+
+.contact__input {
+  width: 240px;
+}
+
+.contacts__add {
+  width: 390px;
+}
+
+/* Стили для иконок контактов */
+.contact__icon {
+  margin-right: 5px; /* Расстояние между значком и текстом */
+}
+
+/* Стили для значков FontAwesome */
+/* Убедитесь, что вы подключили библиотеку иконок FontAwesome в вашем проекте */
+
+/* Телефон */
+/* Телефон */
+.icon-phone:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg opacity='0.7'%3E%3Ccircle cx='8' cy='8' r='8' fill='%239873FF'/%3E%3Cpath d='M11.56 9.50222C11.0133 9.50222 10.4844 9.41333 9.99111 9.25333C9.83556 9.2 9.66222 9.24 9.54222 9.36L8.84444 10.2356C7.58667 9.63556 6.40889 8.50222 5.78222 7.2L6.64889 6.46222C6.76889 6.33778 6.80444 6.16444 6.75556 6.00889C6.59111 5.51556 6.50667 4.98667 6.50667 4.44C6.50667 4.2 6.30667 4 6.06667 4H4.52889C4.28889 4 4 4.10667 4 4.44C4 8.56889 7.43556 12 11.56 12C11.8756 12 12 11.72 12 11.4756V9.94222C12 9.70222 11.8 9.50222 11.56 9.50222Z' fill='white'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.icon-phone:hover:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg opacity='1'%3E%3Ccircle cx='8' cy='8' r='8' fill='%239873FF'/%3E%3Cpath d='M11.56 9.50222C11.0133 9.50222 10.4844 9.41333 9.99111 9.25333C9.83556 9.2 9.66222 9.24 9.54222 9.36L8.84444 10.2356C7.58667 9.63556 6.40889 8.50222 5.78222 7.2L6.64889 6.46222C6.76889 6.33778 6.80444 6.16444 6.75556 6.00889C6.59111 5.51556 6.50667 4.98667 6.50667 4.44C6.50667 4.2 6.30667 4 6.06667 4H4.52889C4.28889 4 4 4.10667 4 4.44C4 8.56889 7.43556 12 11.56 12C11.8756 12 12 11.72 12 11.4756V9.94222C12 9.70222 11.8 9.50222 11.56 9.50222Z' fill='white'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.icon-additional:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='0.7' fill-rule='evenodd' clip-rule='evenodd' d='M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16ZM3 8C3 5.24 5.24 3 8 3C10.76 3 13 5.24 13 8C13 10.76 10.76 13 8 13C5.24 13 3 10.76 3 8ZM9.5 6C9.5 5.17 8.83 4.5 8 4.5C7.17 4.5 6.5 5.17 6.5 6C6.5 6.83 7.17 7.5 8 7.5C8.83 7.5 9.5 6.83 9.5 6ZM5 9.99C5.645 10.96 6.75 11.6 8 11.6C9.25 11.6 10.355 10.96 11 9.99C10.985 8.995 8.995 8.45 8 8.45C7 8.45 5.015 8.995 5 9.99Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+.icon-additional:hover:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='1' fill-rule='evenodd' clip-rule='evenodd' d='M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16ZM3 8C3 5.24 5.24 3 8 3C10.76 3 13 5.24 13 8C13 10.76 10.76 13 8 13C5.24 13 3 10.76 3 8ZM9.5 6C9.5 5.17 8.83 4.5 8 4.5C7.17 4.5 6.5 5.17 6.5 6C6.5 6.83 7.17 7.5 8 7.5C8.83 7.5 9.5 6.83 9.5 6ZM5 9.99C5.645 10.96 6.75 11.6 8 11.6C9.25 11.6 10.355 10.96 11 9.99C10.985 8.995 8.995 8.45 8 8.45C7 8.45 5.015 8.995 5 9.99Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+/* Email */
+.icon-email:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='0.7' fill-rule='evenodd' clip-rule='evenodd' d='M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16ZM4 5.75C4 5.3375 4.36 5 4.8 5H11.2C11.64 5 12 5.3375 12 5.75V10.25C12 10.6625 11.64 11 11.2 11H4.8C4.36 11 4 10.6625 4 10.25V5.75ZM8.424 8.1275L11.04 6.59375C11.14 6.53375 11.2 6.4325 11.2 6.32375C11.2 6.0725 10.908 5.9225 10.68 6.05375L8 7.625L5.32 6.05375C5.092 5.9225 4.8 6.0725 4.8 6.32375C4.8 6.4325 4.86 6.53375 4.96 6.59375L7.576 8.1275C7.836 8.28125 8.164 8.28125 8.424 8.1275Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+.icon-email:hover:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='1' fill-rule='evenodd' clip-rule='evenodd' d='M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16ZM4 5.75C4 5.3375 4.36 5 4.8 5H11.2C11.64 5 12 5.3375 12 5.75V10.25C12 10.6625 11.64 11 11.2 11H4.8C4.36 11 4 10.6625 4 10.25V5.75ZM8.424 8.1275L11.04 6.59375C11.14 6.53375 11.2 6.4325 11.2 6.32375C11.2 6.0725 10.908 5.9225 10.68 6.05375L8 7.625L5.32 6.05375C5.092 5.9225 4.8 6.0725 4.8 6.32375C4.8 6.4325 4.86 6.53375 4.96 6.59375L7.576 8.1275C7.836 8.28125 8.164 8.28125 8.424 8.1275Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+/* Vk */
+.icon-vk:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='0.7' d='M8 0C3.58187 0 0 3.58171 0 8C0 12.4183 3.58187 16 8 16C12.4181 16 16 12.4183 16 8C16 3.58171 12.4181 0 8 0ZM12.058 8.86523C12.4309 9.22942 12.8254 9.57217 13.1601 9.97402C13.3084 10.1518 13.4482 10.3356 13.5546 10.5423C13.7065 10.8371 13.5693 11.1604 13.3055 11.1779L11.6665 11.1776C11.2432 11.2126 10.9064 11.0419 10.6224 10.7525C10.3957 10.5219 10.1853 10.2755 9.96698 10.037C9.87777 9.93915 9.78382 9.847 9.67186 9.77449C9.44843 9.62914 9.2543 9.67366 9.1263 9.90707C8.99585 10.1446 8.96606 10.4078 8.95362 10.6721C8.93577 11.0586 8.81923 11.1596 8.43147 11.1777C7.60291 11.2165 6.81674 11.0908 6.08606 10.6731C5.44147 10.3047 4.94257 9.78463 4.50783 9.19587C3.66126 8.04812 3.01291 6.78842 2.43036 5.49254C2.29925 5.2007 2.39517 5.04454 2.71714 5.03849C3.25205 5.02817 3.78697 5.02948 4.32188 5.03799C4.53958 5.04143 4.68362 5.166 4.76726 5.37142C5.05633 6.08262 5.4107 6.75928 5.85477 7.38684C5.97311 7.55396 6.09391 7.72059 6.26594 7.83861C6.45582 7.9689 6.60051 7.92585 6.69005 7.71388C6.74734 7.57917 6.77205 7.43513 6.78449 7.29076C6.82705 6.79628 6.83212 6.30195 6.75847 5.80943C6.71263 5.50122 6.53929 5.30218 6.23206 5.24391C6.07558 5.21428 6.0985 5.15634 6.17461 5.06697C6.3067 4.91245 6.43045 4.81686 6.67777 4.81686L8.52951 4.81653C8.82136 4.87382 8.88683 5.00477 8.92645 5.29874L8.92808 7.35656C8.92464 7.47032 8.98521 7.80751 9.18948 7.88198C9.35317 7.936 9.4612 7.80473 9.55908 7.70112C10.0032 7.22987 10.3195 6.67368 10.6029 6.09801C10.7279 5.84413 10.8358 5.58142 10.9406 5.31822C11.0185 5.1236 11.1396 5.02785 11.3593 5.03112L13.1424 5.03325C13.195 5.03325 13.2483 5.03374 13.3004 5.04274C13.6009 5.09414 13.6832 5.22345 13.5903 5.5166C13.4439 5.97721 13.1596 6.36088 12.8817 6.74553C12.5838 7.15736 12.2661 7.55478 11.9711 7.96841C11.7001 8.34652 11.7215 8.53688 12.058 8.86523Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+.icon-vk:hover:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='1' d='M8 0C3.58187 0 0 3.58171 0 8C0 12.4183 3.58187 16 8 16C12.4181 16 16 12.4183 16 8C16 3.58171 12.4181 0 8 0ZM12.058 8.86523C12.4309 9.22942 12.8254 9.57217 13.1601 9.97402C13.3084 10.1518 13.4482 10.3356 13.5546 10.5423C13.7065 10.8371 13.5693 11.1604 13.3055 11.1779L11.6665 11.1776C11.2432 11.2126 10.9064 11.0419 10.6224 10.7525C10.3957 10.5219 10.1853 10.2755 9.96698 10.037C9.87777 9.93915 9.78382 9.847 9.67186 9.77449C9.44843 9.62914 9.2543 9.67366 9.1263 9.90707C8.99585 10.1446 8.96606 10.4078 8.95362 10.6721C8.93577 11.0586 8.81923 11.1596 8.43147 11.1777C7.60291 11.2165 6.81674 11.0908 6.08606 10.6731C5.44147 10.3047 4.94257 9.78463 4.50783 9.19587C3.66126 8.04812 3.01291 6.78842 2.43036 5.49254C2.29925 5.2007 2.39517 5.04454 2.71714 5.03849C3.25205 5.02817 3.78697 5.02948 4.32188 5.03799C4.53958 5.04143 4.68362 5.166 4.76726 5.37142C5.05633 6.08262 5.4107 6.75928 5.85477 7.38684C5.97311 7.55396 6.09391 7.72059 6.26594 7.83861C6.45582 7.9689 6.60051 7.92585 6.69005 7.71388C6.74734 7.57917 6.77205 7.43513 6.78449 7.29076C6.82705 6.79628 6.83212 6.30195 6.75847 5.80943C6.71263 5.50122 6.53929 5.30218 6.23206 5.24391C6.07558 5.21428 6.0985 5.15634 6.17461 5.06697C6.3067 4.91245 6.43045 4.81686 6.67777 4.81686L8.52951 4.81653C8.82136 4.87382 8.88683 5.00477 8.92645 5.29874L8.92808 7.35656C8.92464 7.47032 8.98521 7.80751 9.18948 7.88198C9.35317 7.936 9.4612 7.80473 9.55908 7.70112C10.0032 7.22987 10.3195 6.67368 10.6029 6.09801C10.7279 5.84413 10.8358 5.58142 10.9406 5.31822C11.0185 5.1236 11.1396 5.02785 11.3593 5.03112L13.1424 5.03325C13.195 5.03325 13.2483 5.03374 13.3004 5.04274C13.6009 5.09414 13.6832 5.22345 13.5903 5.5166C13.4439 5.97721 13.1596 6.36088 12.8817 6.74553C12.5838 7.15736 12.2661 7.55478 11.9711 7.96841C11.7001 8.34652 11.7215 8.53688 12.058 8.86523Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+/* Facebook */
+.icon-facebook:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='0.7' d='M7.99999 0C3.6 0 0 3.60643 0 8.04819C0 12.0643 2.928 15.3976 6.75199 16V10.3775H4.71999V8.04819H6.75199V6.27309C6.75199 4.25703 7.94399 3.14859 9.77599 3.14859C10.648 3.14859 11.56 3.30121 11.56 3.30121V5.28514H10.552C9.55999 5.28514 9.24799 5.90362 9.24799 6.53815V8.04819H11.472L11.112 10.3775H9.24799V16C11.1331 15.7011 12.8497 14.7354 14.0879 13.2772C15.3261 11.819 16.0043 9.96437 16 8.04819C16 3.60643 12.4 0 7.99999 0Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+.icon-facebook:hover:before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath opacity='1' d='M7.99999 0C3.6 0 0 3.60643 0 8.04819C0 12.0643 2.928 15.3976 6.75199 16V10.3775H4.71999V8.04819H6.75199V6.27309C6.75199 4.25703 7.94399 3.14859 9.77599 3.14859C10.648 3.14859 11.56 3.30121 11.56 3.30121V5.28514H10.552C9.55999 5.28514 9.24799 5.90362 9.24799 6.53815V8.04819H11.472L11.112 10.3775H9.24799V16C11.1331 15.7011 12.8497 14.7354 14.0879 13.2772C15.3261 11.819 16.0043 9.96437 16 8.04819C16 3.60643 12.4 0 7.99999 0Z' fill='%239873FF'/%3E%3C/svg%3E");
+}
+
+/* Значок по умолчанию */
+.icon-info-circle:before {
+  content: "\f05a"; /* Значок информации */
+}
+
+.contact__value {
+  display: none;
+  position: absolute;
+  top: -41px;
+  left:-57px;
+  min-width: 134px;
+  height: 30px;
+  padding: 8px 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: var(--black);
+  white-space: nowrap;
+}
+
+.contact__value:after {
+  content: '';
+  border: 10px solid transparent;
+  border-top: 10px solid var(--black);
+  position: absolute;
+  left: 50%;
+  margin-left: -12px;
+  bottom: -18px;
+  width: 0;
+}
+
+/* Показ контакта при наведении на иконку */
+.contact__icon {
+  cursor: pointer;
+}
+
+.contact__item {
+  position: relative;
+}
+
+
+/* Показать контакт при наведении на иконку */
+.contact__item:hover + .contact__value {
+  display: block;
+}
+
+.contacts__change {
+  margin: 0;
+  width: 390px;
+}
+
+/* анимация кнопок */
+
+
+.btn__addClient{
+  transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn__addClient > svg {
+  fill: #9873FF;
+  transition: fill 0.3s ease-in-out;
+}
+.btn__addClient:focus {
+  border: 1px solid var(--grey);
+  background-color: none;
+  color: var(--grey);
+}
+
+.btn__addClient:focus > svg {
+  fill: var(--grey);
+}
+
+.btn__addClient:hover {
+  border: 1px solid var(--firm);
+  background-color: #B89EFF;
+  color: #fff;
+}
+
+.btn__addClient:hover > svg {
+  fill: #fff;
+}
+
+.btn__addClient:active {
+  border: 1px solid var(--firm);
+  background-color: #8052FF;
+  color: #fff;
+}
+
+.btn__addClient:active > svg {
+  fill: #fff;
+}
+
+.btn__save,
+.delete__button {
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn__save:focus,
+.delete__button:focus {
+  background-color: var(--grey);
+}
+
+.btn__save:hover,
+.delete__button:hover {
+  background-color: #B89EFF;
+}
+
+.btn__save:active,
+.delete__button:active {
+  background-color: #8052FF;
+}
+
+.btn__delete:hover {
+  color: var(--red);
+}
+
+.btn__changes:hover {
+  color: var(--firm);
+}
+
+.add__contact:hover {
+  color: var(--firm);
+}
+
+.add__contact:before {
+  content: "";
+  display: inline-block; /* Позволяет элементу быть на одном уровне с текстом */
+  margin-right: 4px; /* Отступ справа для текста */
+  background-image: url("../img/add_circle_outline.svg");
+  width: 16px;
+  height: 16px;
+  background-position: top;
+  background-size: cover; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  background-image 0.3s ease-in-out;
+}
+
+.add__contact:hover:before {
+  background-image: url("../img/add_circle_outline_hover.svg");
+}
+
+.contact__delete {
+  padding: 13px 10px;
+  position: relative;
+  height: 40px;
+  border: 1px solid var(--tex-grey);
+  background: var(--bacground);
+  background-image: url("../img/crox-del.svg");
+  background-position: center;
+  background-size: 12px 12px; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  background-image 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+.contact__delete:hover {
+  background-image: url("../img/crox-del-red.svg");
+  border: 1px solid var(--red);
+}
+
+
+.button__hint  {
+  display: none;
+  position: absolute;
+  top: -25px;
+  left:-55px;
+  min-width: 134px;
+  height: 30px;
+  padding: 8px 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: var(--black);
+  white-space: nowrap;
+}
+
+.button__hint:after  {
+  content: '';
+  border: 10px solid transparent;
+  border-top: 10px solid var(--black);
+  position: absolute;
+  left: 50%;
+  margin-left: -12px;
+  bottom: -18px;
+  width: 0;
+}
+
+/* Показать подсказку при наведении на кнопку */
+.contact__delete:hover .button__hint {
+  display: block;
+}
+
+
+/* Стилизация выпадающего списка */
+/* Стили для обертки */
+.dropdown-wrapper {
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  width: 123px; /* Ширина по желанию */
+}
+
+/* Стили для кнопки выпадающего списка */
+.dropdown-button {
+  width: 123px;
+  height: 40px;
+  padding: 8px;
+  border: 1px solid var(--tex-grey);
+  border-right: none;
+  background-color: var(--grey);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Стили для выпадающего списка */
+.dropdown-list {
+  display: none;
+  position: absolute;
+  width: 124px;
+  background-color: #F4F3F6;
+  border: 1px solid var(--tex-grey);
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Стили для элементов списка */
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bacground);
+}
+
+/* Показать выпадающий список */
+.dropdown-list.show {
+  display: block;
+}
+
+/* Стили для стрелки (по желанию) */
+.dropdown-button::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url('../img/check_mark.svg'); /* Путь к иконке */
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-left: auto;
+}
+
+/* Переворот стрелки при открытии выпадающего списка */
+.dropdown-button.open::after {
+  transform: rotate(180deg);
+}
+
+
+/* Стилизация модального окна подтверждения удаления клиента */
+
+
+.delete__container {
+  padding: 25px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 215px;
+  background: white;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title__del {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.delete__content {
+  margin: 0;
+  margin-bottom: 25px;
+  width: 275px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 130%;
+  color: var(--black);
+}
+
+.delete__button {
+padding: 14px 35px;
+}
+
+.contact__input {
+  width: 255px;
+}
+
+.modal__error {
+  margin: -15px auto 10px auto;
+  display: none;
+  text-align: center;
+  width: 255px;
+  font-size: 10px;
+  color: var(--red);
+}
+

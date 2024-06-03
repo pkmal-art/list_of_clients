@@ -200,6 +200,8 @@ module.exports = createServer(async (req, res) => {
   try {
     // обрабатываем запрос и формируем тело ответа
     const body = await (async () => {
+      console.log(req.method);
+      console.log(uri);
       if (uri === '' || uri === '/') {
         // /api/clients
         if (req.method === 'GET') return getClientList(queryParams);

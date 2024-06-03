@@ -1,0 +1,175 @@
+@media(max-width:1200px) {
+  .clients__table {
+    width: 984px;
+  }
+
+  .clients__id {
+    width: 90px;
+    text-align: center;
+  }
+
+  .clients__name {
+    width: 236px;
+  }
+
+  .clients__date {
+    width: 150px;
+  }
+
+  .clients__contacts {
+    width: 150px;
+  }
+
+  .clients__actions {
+    width: 210px;
+  }
+
+  .clients__grey {
+    font-size: 10px;
+  }
+}
+
+@media(max-width:1000px) {
+  .clients__table {
+    width: 728px;
+  }
+
+  .clients__item {
+    padding: 8px 0;
+    align-items: center;
+  }
+
+  .clients__id {
+    width: 80px;
+    text-align: center;
+  }
+
+  .clients__name {
+    padding: 5px;
+    width: 230px;
+  }
+
+  .clients__date {
+    width: 100px;
+  }
+
+  .clients__contacts {
+    width: 128px;
+  }
+
+  .clients__actions {
+    width: 110px;
+  }
+
+  .btn__change {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .clients__time {
+    margin-left: 0;
+  }
+
+}
+
+@media (max-width: 750px) {
+  .header__logo {
+    margin-right: 13px;
+  }
+  .clients__listing {
+    display: block;
+    overflow: auto; /* включаем горизонтальную прокрутку */
+  }
+
+  .clients {
+    display: block;
+  }
+
+  .clients__container {
+    padding: 0 10px;
+  }
+}
+
+
+@media(max-width:680px) {
+  .header__input {
+    width: 320px;
+  }
+}
+
+@media(max-width:450px) {
+  .header__container {
+    margin-bottom: 30px;
+    padding: 8px;
+    justify-content: center;
+  }
+  .header__logo {
+    margin: 0;
+  }
+
+  .header__logo svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__search {
+    display: none;
+  }
+
+  .clients__title {
+    margin-bottom: 2px;
+    font-size: 18px;
+  }
+
+  .clients__header {
+    margin-bottom: 10px;
+  }
+
+  .modal__content {
+    padding: 25px 15px;
+    width: 300px;
+  }
+
+  .modal__close {
+    top: 3px;
+    right: 3px;
+  }
+
+  .placeholder {
+    left: 15px;
+  }
+
+  .input__contacts{
+    margin: 0 -15px 25px -15px;
+  }
+
+  .modal__title--change{
+    white-space: nowrap;
+  }
+
+  .id__grey {
+    font-size: 8px;
+  }
+
+  .input__contacts--indent {
+    padding: 25px 15px;
+  }
+  .dropdown__wrapper {
+    width: 109px;
+  }
+
+  .dropdown__button {
+    width: 108px;
+  }
+  .dropdown__list {
+    width: 109px;
+  }
+
+
+  .contact {
+    width: 160px;
+  }
+  .contact__input {
+    width: 140px;
+  }
+}

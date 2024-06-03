@@ -1,0 +1,239 @@
+@media(max-width:1200px) {
+  .clients__container {
+    padding: 0 20px;
+  }
+
+  .list__id {
+    width: 110px;
+  }
+
+  .list__fullname {
+    width: 243px;
+  }
+
+  .list__datecreate {
+    width: 154px;
+  }
+
+  .list__datechange {
+    width: 154px;
+  }
+
+  .list__contact {
+    width: 133px;
+  }
+
+  .list__active {
+    width: 192px;
+  }
+
+  .btn__changes {
+    margin-right: 5px;
+  }
+}
+
+@media(max-width:1000px) {
+  .clients__title {
+    margin-bottom: 14px;
+  }
+  .clients__table--header{
+    padding: 0;
+    padding-bottom: 12px;
+  }
+  .clients__container {
+    padding: 0 20px;
+  }
+
+  .clients__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .client__cell {
+    padding: 10px 10px;
+  }
+
+  .list__id {
+    padding-left: 10px;
+    width: 110px;
+  }
+
+  .list__fullname {
+    padding-left: 10px;
+    width: 220px;
+  }
+
+  .list__datecreate,
+  .list__datechange {
+    width: 97px;
+    flex-direction: column;
+    justify-content: center; /* Выравнивание по вертикали */
+    align-items: flex-start;
+  }
+
+  .time {
+    margin-left: 0;
+    padding-top: 3px;
+  }
+
+  .list__contact {
+    width: 126px;
+  }
+
+  .list__active {
+    width: 115px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .btn__changes {
+    margin-right: 0;
+  }
+
+  .btn__delete {
+    margin-right: 12px;
+  }
+
+  .sort__date {
+    width: 102px;
+  }
+
+  .header__activ {
+    flex-direction: row;
+  }
+
+  .studentsItem {
+    margin-bottom: 38px;
+  }
+  .modal__add {
+    margin: 0 -29px 25px -29px;
+  }
+
+}
+
+@media(max-width:750px) {
+  .clients__list {
+    display: block;
+    overflow: auto;
+  }
+
+  .header__logo {
+    margin-right: 10px;
+  }
+}
+
+@media(max-width:670px) {
+
+.clients__container {
+  padding: 0 10px;
+}
+
+.header {
+height: 40px;
+}
+
+.header__search {
+  display: none;
+}
+
+.header__container {
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__logo {
+  margin: 0;
+}
+
+.header__logo > img {
+  height: 24px;
+}
+
+.delete__container,
+.modal-content {
+  padding: 25px 15px;
+  width: 300px;
+}
+
+
+.close,
+.closeChange {
+  top: 4px;
+  right: 4px;
+}
+
+.form__placeholder--surname,
+.form__placeholder--name,
+.form__placeholder--lastname {
+  left: 15px;
+}
+
+.form__placeholder--surname.active {
+  top: 72px;
+}
+
+
+.form__placeholder--name {
+  top: 148px
+}
+
+.form__placeholder--lastname {
+  top: 205px;
+}
+
+.modal__form--lastname {
+  margin-bottom: 30px;
+}
+
+.modal__add {
+  margin: 0px -15px 25px -15px;
+  padding: 10px 15px;
+}
+
+.btn__save, .delete__button {
+  padding: 13px 33px;
+}
+
+.modal__header {
+  white-space: nowrap;
+}
+
+
+.contacts__add {
+  width: 280px;
+}
+
+.contacts__change{
+  width: 270px;
+}
+
+.contact {
+  width: 165px;
+}
+
+.contact__input {
+  width: 140px;
+}
+
+.dropdown-wrapper {
+  width: 109px;
+}
+
+.dropdown-button {
+  width: 109px;
+}
+
+.title__id {
+  font-size: 11px;
+}
+.modal__add--indent {
+  padding: 25px 15px;
+}
+.modal__form {
+  padding-bottom: 7px;
+}
+
+}

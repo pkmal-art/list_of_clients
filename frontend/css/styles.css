@@ -1,0 +1,899 @@
+/* стартовый сброс */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+/* подключение шрифтов */
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-Regular.woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-SemiBold.woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../font/OpenSans-Bold.woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* основные цвета сайта */
+
+:root {
+  --green: #34C759;
+  --orange: #E6B127;
+  --red: #F06A4D;
+  --firm: #9873FF;
+  --grey: #C8C5D1;
+  --txt-grey: #B0B0B0;
+  --black: #333333;
+  --bacground: #E5E5E5;
+}
+
+/* стандартные стили для body */
+
+.page {
+  font-family: 'OpenSans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--black);
+  min-width: 320px;
+  background: var(--bacground);
+}
+
+.container {
+  max-width: 1406px; /* поменять на max-width */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn {
+  display: inline-block; /* чтобы высота элементов была одинаковая */
+  padding: 13px 27px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--firm);
+  border: 1px solid var(--firm);
+  border-radius: none;
+  background: none;
+  cursor: pointer;
+}
+
+.btn__reset {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--black);
+  border: none;
+}
+
+
+/* сброс стилей у списка */
+
+.list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* header */
+.header__container {
+  padding: 20px;
+  margin-bottom: 40px;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 3px 6px 0 rgba(176, 190, 197, 0.32), 0 9px 27px 0 rgba(176, 190, 197, 0.32);
+}
+
+.header__logo {
+  margin-right: 53px;
+}
+
+.header__input {
+  padding: 16px 13px;
+  font-size: 14px;
+  color: var(--txt-grey);
+  width: 581px;
+  height: 44px;
+  border: 1px solid rgba(51, 51, 51, 0.2);
+}
+
+/* clients */
+
+.clients {
+  display: flex;
+  align-items: center;
+}
+
+.clients__listing {
+  margin-bottom: 40px;
+  width: 100%;
+}
+.clients__title {
+  margin: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.clients__table {
+  width: 1186px;
+}
+
+.clients__header {
+  padding: 0;
+  margin-bottom: 15px;
+  align-items: flex-end;
+}
+
+.clients__heading {
+  font-size: 12px;
+  color: var(--txt-grey);
+}
+
+.arrow {
+  fill: var(--firm);
+}
+
+/* -- анимация для стрелок и заголовков -- */
+
+/* ---- */
+.clients__item {
+  padding: 20px 0;
+  background: white;
+  border-bottom: 1px solid var(--grey);
+}
+
+.clients__id {
+  width: 100px;
+  text-align: center;
+}
+
+.clients__name {
+  width: 370px;
+}
+
+.clients__date {
+  width: 175px;
+  word-break: break-all;
+}
+
+.clients__contacts {
+  width: 165px;
+  flex-wrap: wrap;
+}
+
+
+.contact__item {
+  position: relative;
+
+}
+.clients__actions {
+  width: 210px;
+}
+
+.clients__grey {
+  font-size: 12px;
+}
+
+.clients__grey,
+.clients__time {
+  color: var(--txt-grey);
+  white-space: nowrap;
+}
+
+.clients__time {
+  margin-left: 10px;
+}
+
+.contact__icon {
+  margin-right: 5px; /* Расстояние между значком и текстом */
+}
+
+.contact__icon:before {
+  content: "";
+  display: inline-block; /* Позволяет элементу быть на одном уровне с текстом */
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+  background-position: top;
+  background-size: cover; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  opacity 0.3s ease-in-out;
+}
+
+.icon-phone:before {
+  background-image: url("../img/phone.svg");
+  opacity: 0.7;
+}
+
+.icon-phone:hover:before {
+  opacity: 1;
+}
+
+
+.icon-email:before {
+  background-image: url("../img/mail.svg");
+  opacity: 0.7;
+}
+
+.icon-email:hover:before {
+  opacity: 1;
+}
+
+.icon-additional:before {
+  background-image: url("../img/additional.svg");
+  opacity: 0.7;
+}
+
+.icon-additional:hover:before {
+  opacity: 1;
+}
+
+/* Vk */
+.icon-vk:before {
+  background-image: url("../img/vk.svg");
+  opacity: 0.7;
+}
+
+.icon-vk:hover:before {
+  opacity: 1;
+}
+
+/* Facebook */
+.icon-facebook:before {
+  background-image: url("../img/fb.svg");
+  opacity: 0.6;
+}
+
+.icon-facebook:hover:before {
+  opacity: 1;
+}
+
+
+
+.contact__value {
+  display: none;
+  position: absolute;
+  top: -41px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 134px;
+  height: 30px;
+  padding: 8px 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: var(--black);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.contact__value:after {
+  content: '';
+  border: 10px solid transparent;
+  border-top: 10px solid var(--black);
+  position: absolute;
+  left: 50%;
+  margin-left: -12px;
+  bottom: -18px;
+  width: 0;
+}
+
+
+.btn__change {
+  margin-right: 30px;
+}
+
+.btn__change:before {
+  content: "";
+  display: inline-block; /* Позволяет элементу быть на одном уровне с текстом */
+  background-image: url("../img/pen.svg");
+  width: 14px;
+  height: 14px;
+  background-position: top;
+  background-size: cover; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  color 0.3s ease-in-out;
+}
+
+.btn__change:hover {
+  color: var(--firm);
+}
+
+.btn__delete:before {
+  content: "";
+  display: inline-block; /* Позволяет элементу быть на одном уровне с текстом */
+  background-image: url("../img/crox-del-red.svg");
+  width: 14px;
+  height: 14px;
+  background-position: top;
+  background-size: cover; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+}
+
+.btn__delete:hover {
+  color: var(--red);
+}
+
+
+.client__add {
+  text-align: center;
+}
+
+.btn__add {
+  padding: 13px 24px;
+  transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn__add > svg {
+  margin-right: 5px;
+  fill: #9873FF;
+  transition: fill 0.3s ease-in-out;
+}
+.btn__add:focus {
+  border: 1px solid var(--grey);
+  background-color: none;
+  color: var(--grey);
+}
+
+.btn__add:focus > svg {
+  fill: var(--grey);
+}
+
+.btn__add:hover {
+  border: 1px solid var(--firm);
+  background-color: #B89EFF;
+  color: white;
+}
+
+.btn__add:hover > svg {
+  fill: white;
+}
+
+.btn__add:active {
+  border: 1px solid var(--firm);
+  background-color: #8052FF;
+  color: white;
+}
+
+.btn__add:active > svg {
+  fill: white;
+}
+
+/* модальные окна
+
+.modal__window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal__add {
+  display: none;
+}
+
+.modal__change {
+  display: none;
+}*/
+
+.modal__content {
+  padding: 25px 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 450px;
+  min-height: 400px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+}
+
+.modal__title {
+  margin: 0;
+  margin-bottom: 38px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.modal__close {
+  position: absolute;
+  top: 15px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(200, 197, 209, 0.5);
+}
+
+.input__surname,
+.input__name {
+  padding-bottom: 4px;
+  margin-bottom: 36px;
+}
+
+.input__lastname {
+  padding-bottom: 4px;
+  margin-bottom: 25px;
+}
+
+.input--error {
+  border-bottom: 1px solid var(--red);
+}
+
+.star {
+  font-weight: 600;
+  color: var(--firm);
+}
+
+.placeholder {
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--txt-grey);
+  transform: translateY(-50%);
+  transition: all 0.3s ease-in-out;
+}
+
+
+.placeholder__surname {
+  top: 90px;
+}
+
+.placeholder__surname--add.active {
+  top: 75px;
+  font-size: 10px;
+}
+
+.placeholder__name {
+  top: 145px;
+}
+
+.placeholder__name--add.active {
+  top: 130px;
+  font-size: 10px;
+}
+
+.placeholder__lastname {
+  top: 205px;
+}
+
+.placeholder__lastname--add.active {
+  top: 188px;
+  font-size: 10px;
+}
+
+.input__contacts {
+  margin: 0;
+  margin: 0 -30px 25px -30px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  text-align: center ;
+  background: rgba(200, 197, 209, 0.3);
+}
+
+.btn__contacts {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--black);
+  transition:  color 0.3s ease-in-out;
+}
+
+.btn__contacts:hover {
+  color: var(--firm);
+}
+
+.btn__contacts:before {
+  content: "";
+  display: inline-block; /* Позволяет элементу быть на одном уровне с текстом */
+  background-image: url("../img/add_circle_outline.svg");
+  width: 14px;
+  height: 14px;
+  background-position: bottom;
+  background-size: cover; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  background-image 0.3s ease-in-out;
+}
+
+.btn__contacts:hover:before {
+  background-image: url("../img/add_circle_outline_hover.svg");
+}
+
+.input__save,
+.input__cancel,
+.input__del {
+  text-align: center;
+}
+
+.modal__error {
+  margin: -15px auto 10px auto;
+  display: none;
+  text-align: center;
+  width: 255px;
+  font-size: 10px;
+  color: var(--red);
+}
+
+.btn__save {
+  padding: 14px 35px;
+  margin: 0;
+  margin-bottom: 5px;
+  width: 147px;
+  height: 44px;
+  background: var(--firm);
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn__save:focus,
+.btn__del--delete:focus{
+  background-color: var(--grey);
+}
+
+.btn__save:hover,
+.btn__del--delete:hover {
+  background-color: #B89EFF;
+}
+
+.btn__save:active,
+.btn__del--delete:active  {
+  background-color: #8052FF;
+}
+
+.btn__cancel,
+.btn__del {
+  font-weight: 400;
+  font-size: 12px;
+  text-decoration: underline;
+}
+/* модальное окно изменения */
+.modal__header--change {
+  margin-bottom: 38px;
+  align-items: flex-end;
+}
+
+.modal__title--change {
+  margin-bottom: 0;
+}
+
+.id__grey {
+  margin-left: 9px;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--txt-grey);
+}
+
+.placeholder__surname--change.active {
+  top: 75px;
+  font-size: 10px;
+}
+
+.placeholder__name--change.active {
+  top: 130px;
+  font-size: 10px;
+}
+
+.placeholder__lastname--change.active {
+  top: 188px;
+  font-size: 10px;
+}
+
+.contact__wrapper {
+  margin-bottom: 15px;
+}
+
+.contact {
+  padding-left: 10px;
+  width: 262px;
+  border: 1px solid var(--grey);
+  background: inherit;
+}
+
+.contact__input {
+  width: 240px;
+  border: 1px solid var(--grey);
+  border-right: none;
+  background: inherit;
+}
+
+/* Стилизация выпадающего списка */
+.input__contacts--indent {
+  padding: 25px 30px;
+}
+/* Стили для обертки */
+
+.dropdown__wrapper {
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  width: 123px; /* Ширина по желанию */
+  height: 37px;
+  border: 1px solid var(--grey);
+}
+
+/* Стили для кнопки выпадающего списка */
+.dropdown__button {
+  width: 123px;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid var(--txt-grey);
+  border-right: none;
+  background-color: var(--grey);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Стили для выпадающего списка */
+.dropdown__list {
+  display: none;
+  position: absolute;
+  width: 124px;
+  background-color: #F4F3F6;
+  border: 1px solid var(--txt-grey);
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Стили для элементов списка */
+.dropdown__item {
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdown__item:hover {
+  background-color: var(--bacground);
+}
+
+/* Показать выпадающий список */
+.dropdown__list.show {
+  display: block;
+}
+
+/* Стили для стрелки (по желанию) */
+.dropdown__button::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url('../img/check_mark.svg'); /* Путь к иконке */
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-left: auto;
+}
+
+/* Переворот стрелки при открытии выпадающего списка */
+.dropdown__button.open::after {
+  transform: rotate(180deg);
+}
+
+/* Удаление контакта в модальном окне */
+.contact__delete {
+  padding: 13px 10px;
+  position: relative;
+  height: 37px;
+  border: 1px solid var(--txt-grey);
+  background: var(--bacground);
+  background-image: url("../img/crox-del.svg");
+  background-position: center;
+  background-size: 12px 12px; /* Изменено на cover для корректного масштабирования */
+  background-repeat: no-repeat;
+  transition:  background-image 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+.contact__delete:hover {
+  background-image: url("../img/crox-del-red.svg");
+  border: 1px solid var(--red);
+}
+
+
+.button__hint  {
+  display: none;
+  position: absolute;
+  top: -27px;
+  left:-55px;
+  min-width: 134px;
+  height: 30px;
+  padding: 8px 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: var(--black);
+  white-space: nowrap;
+}
+
+.button__hint:after  {
+  content: '';
+  border: 10px solid transparent;
+  border-top: 10px solid var(--black);
+  position: absolute;
+  left: 50%;
+  margin-left: -12px;
+  bottom: -18px;
+  width: 0;
+}
+
+/* Показать подсказку при наведении на кнопку */
+.contact__delete:hover .button__hint {
+  display: block;
+}
+
+
+/* модальное окно удаления
+.modal__delete {
+  display: none;
+}*/
+
+.modal__content--delete {
+  flex-direction: column;
+  align-items: center;
+  min-height: 215px;
+}
+
+.modal__title--delete {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 11px;
+}
+
+.delete__content {
+  margin-bottom: 25px;
+  width: 275px;
+  text-align: center;
+}
+
+.btn__del--delete {
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  width: 130px;
+  height: 44px;
+  background: var(--firm);
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* сообщение при отсутствии результата */
+.message {
+  align-items: center;
+  justify-content: center;
+}
+
+.message__result {
+  padding: 10px;
+  display: none;
+  width: 983px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--red);
+  background: white;
+}
+
+/* Стили для сортировки */
+
+.arrow--id,
+.arrow--fullName,
+.arrow--create,
+.arrow--change{
+  fill: var(--firm);
+  opacity: 0.7;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.desc.arrow--id {
+  transform: rotate(180deg);
+}
+
+.desc.arrow--fullName {
+  transform: rotate(180deg);
+}
+
+.desc.arrow--create {
+  transform: rotate(180deg);
+}
+
+.desc.arrow--change {
+  transform: rotate(180deg);
+}
+
+.clients__hd {
+  cursor: pointer;
+  transition:  color 0.3s ease-in-out;
+}
+
+.clients__hd:hover {
+  color: var(--black)
+}
+
+.clients__hd:hover svg {
+  opacity: 1;
+}
+
+.modal__window {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.modal__window.show {
+  top: 0;
+  opacity: 1;
+}
+
+/*
+.modal__window .modal__content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+*/
+
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
