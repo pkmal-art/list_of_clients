@@ -1,10 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-  loadClients();
+
 
   /* -- Переменные используемые в различных частях кода -- */
   let currentClientIndex;
   const form = document.querySelector('.form__group');
   const list = document.getElementById('clientsItems');
+  const API_BASE_URL = 'http://localhost:3000/api/clients';
+  const CONTACT_TYPES = ['Телефон', 'Email', 'Vk', 'Facebook', 'Другое'];
+  const EMPTY_RESULT_COUNT = 0;
+  const SEARCH_DELAY_MS = 300;
+  const DROPDOWN_DEFAULT_INDEX = 0;
+  const EMPTY_VALUE = 0;
+  const MIN_LENGHT_SYMBOLS = 2;
+
+  loadClients();
   /* -- Конец объявления переменных -- */
 
   /* -- Функции работы с данными -- */
@@ -29,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Функция для загрузки данных клиента
   async function loadClientData(clientId) {
     try {
-      const response = await fetch(`http://localhost:3000/api/clients/${clientId}`);
+      const response = await fetch(`${API_BASE_URL}/${clientId}`);
       if (!response.ok) {
         throw new Error('Ошибка при загрузке данных клиента');
       }
@@ -40,90 +49,127 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
+  //************************************/
+
+  // Основная функция, вызываемая для заполнения модального окна
   function populateChangeClientModal(clientData) {
-    if (clientData) {
-      document.getElementById('surnameChange').value = clientData.surname;
-      document.getElementById('nameChange').value = clientData.name;
-      document.getElementById('lastnameChange').value = clientData.lastName;
-      document.getElementById('idChange').innerHTML = "ID: " + clientData.id;
+    if (!clientData) return;
 
-      // Очистка списка контактов перед заполнением
-      const contactsList = document.querySelector('.contacts__list--change');
-      contactsList.innerHTML = '';
+    populateClientInfo(clientData);
+    clearContactsList();
+    populateContacts(clientData.contacts);
+  }
 
-      // Заполнение контактов
-      clientData.contacts.forEach(contact => {
-        const contactAddChange = document.querySelector('.input__contacts--change');
-      contactAddChange.classList.add('input__contacts--indent');
+  // Функция для заполнения основной информации о клиенте
+  function populateClientInfo(clientData) {
+    document.getElementById('surnameChange').value = clientData.surname;
+    document.getElementById('nameChange').value = clientData.name;
+    document.getElementById('lastnameChange').value = clientData.lastName;
+    document.getElementById('idChange').innerHTML = "ID: " + clientData.id;
+  }
 
-      const clientContactWrapper = createElement('div', 'contact__wrapper', '');
-      clientContactWrapper.classList.add('flex');
+  // Функция для очистки списка контактов
+  function clearContactsList() {
+    const contactsList = document.querySelector('.contacts__list--change');
+    contactsList.innerHTML = '';
+  }
 
-      const options = ['Телефон', 'Email',  'Vk',  'Facebook', 'Другое'];
-      const clientContactType = document.createElement('div');
-      clientContactType.classList.add('dropdown__wrapper');
+  // Функция для заполнения списка контактов
+  function populateContacts(contacts) {
+    const contactsList = document.querySelector('.contacts__list--change');
 
-      const dropdownButton = document.createElement('div');
-      dropdownButton.classList.add('dropdown__button');
-      dropdownButton.classList.add('type');
-      dropdownButton.textContent = contact.type; // Установка сохраненного типа контакта
-      clientContactType.appendChild(dropdownButton);
+    contacts.forEach(contact => {
+        const contactElement = createContactElement(contact);
+        contactsList.appendChild(contactElement);
+    });
+  }
 
-      const dropdownList = document.createElement('ul');
-      dropdownList.classList.add('dropdown__list');
-      clientContactType.appendChild(dropdownList);
+  // Функция для создания элемента контакта
+  function createContactElement(contact) {
+    const clientContactWrapper = createElement('div', 'contact__wrapper flex', '');
 
-      options.forEach(option => {
+    const clientContactType = createDropdown(contact.type);
+    const clientContact = createContactInput(contact.value);
+    const deleteButton = createDeleteButton(clientContactWrapper);
+
+    clientContactWrapper.appendChild(clientContactType);
+    clientContactWrapper.appendChild(clientContact);
+    clientContactWrapper.appendChild(deleteButton);
+
+    return clientContactWrapper;
+  }
+
+  // Функция для создания выпадающего списка типа контакта
+  function createDropdown(selectedType) {
+    const options = CONTACT_TYPES;
+
+    const clientContactType = document.createElement('div');
+    clientContactType.classList.add('dropdown__wrapper');
+
+    const dropdownButton = document.createElement('div');
+    dropdownButton.classList.add('dropdown__button', 'type');
+    dropdownButton.textContent = selectedType;
+    clientContactType.appendChild(dropdownButton);
+
+    const dropdownList = document.createElement('ul');
+    dropdownList.classList.add('dropdown__list');
+    clientContactType.appendChild(dropdownList);
+
+    options.forEach(option => {
         const listItem = document.createElement('li');
         listItem.classList.add('dropdown__item');
         listItem.textContent = option;
         listItem.addEventListener('click', () => {
-          dropdownButton.textContent = option;
-          dropdownList.classList.remove('show');
+            dropdownButton.textContent = option;
+            dropdownList.classList.remove('show');
         });
         dropdownList.appendChild(listItem);
-      });
+    });
 
-      dropdownButton.addEventListener('click', () => {
+    dropdownButton.addEventListener('click', () => {
         dropdownList.classList.toggle('show');
         dropdownButton.classList.toggle('open');
-      });
+    });
 
-      const clientContact = createElement('input', 'contact', '');
-      clientContact.classList.add('contact__input');
-      clientContact.placeholder = 'Введите данные контакта';
-      //clientContact.id = 'contactClient';
-      clientContact.value = contact.value; // Заполняем значение контакта
-
-      const deleteButton = document.createElement('button');
-      deleteButton.classList.add('contact__delete');
-      const deleteButtonHint = createElement('div', 'button__hint', 'Удалить контакт');
-      deleteButton.appendChild(deleteButtonHint);
-
-      deleteButton.style.display = 'inline-block'; // Показываем кнопку удаления
-
-      deleteButton.addEventListener('click', function() {
-        clientContactWrapper.remove();
-      });
-
-      clientContactWrapper.appendChild(clientContactType);
-      clientContactWrapper.appendChild(clientContact);
-      clientContactWrapper.appendChild(deleteButton);
-      contactsList.appendChild(clientContactWrapper);
-      });
-
-
-    }
+    return clientContactType;
   }
+
+  // Функция для создания текстового ввода для контакта
+  function createContactInput(value) {
+    const clientContact = createElement('input', 'contact contact__input', '');
+    clientContact.placeholder = 'Введите данные контакта';
+    clientContact.value = value;
+    return clientContact;
+  }
+
+  // Функция для создания кнопки удаления контакта
+  function createDeleteButton(contactWrapper) {
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('contact__delete');
+
+    const deleteButtonHint = createElement('div', 'button__hint', 'Удалить контакт');
+    deleteButton.appendChild(deleteButtonHint);
+
+    deleteButton.style.display = 'inline-block';
+    deleteButton.addEventListener('click', () => {
+        contactWrapper.remove();
+    });
+
+    return deleteButton;
+  }
+
+  //************************************/
+
 
   function openModal(modal, hash) {
     modal.classList.add('show');
     window.location.hash = hash;
   }
+
   /* Функция загрузки клиентов из базы данных */
   async function loadClients() {
     try {
-      const response = await fetch('http://localhost:3000/api/clients', {
+      const response = await fetch(`${API_BASE_URL}`, {
         method: 'GET',
       });
 
@@ -141,78 +187,81 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Ошибка при загрузке студентов:', error);
     }
   }
-  //Функция создания клиентов
 
+    //************************************/
+  //Функция создания клиентов
+  // Функция обработки отправки формы
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const contactsWrapper = document.querySelectorAll('.contact__wrapper');
-
     const errorAdd = document.getElementById('errorModalAdd');
     const surnameInput = document.getElementById('surnameAdd');
     const nameInput = document.getElementById('nameAdd');
     const lastnameInput = document.getElementById('lastnameAdd');
 
-
-    const surname = capitalizeFirstLetter(document.getElementById('surnameAdd').value.trim());
-    const name = capitalizeFirstLetter(document.getElementById('nameAdd').value.trim());
-    const lastname = capitalizeFirstLetter(document.getElementById('lastnameAdd').value.trim());
-
+    const surname = capitalizeFirstLetter(surnameInput.value.trim());
+    const name = capitalizeFirstLetter(nameInput.value.trim());
+    const lastname = capitalizeFirstLetter(lastnameInput.value.trim());
 
     try {
-      // Проверка имени, фамилии и отчества
       validateName(surname, name, lastname, surnameInput, nameInput, lastnameInput, errorAdd);
-
-      // Проверка контактов
-      const contacts = validateContacts(contactsWrapper, errorAdd);
-
-      const response = await fetch('http://localhost:3000/api/clients', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          surname,
-          name,
-          lastName: lastname,
-          contacts,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка добавления данных');
-      }
-
-      const data = await response.json();
-      await addClientsToList(data);
-
-      // Очистка формы после добавления
-      document.getElementById('surnameAdd').value = '';
-      document.getElementById('nameAdd').value = '';
-      document.getElementById('lastnameAdd').value = '';
-      errorAdd.style.display = 'none';
-
-      // Очистка контактов после добавления
-      contactsWrapper.forEach(contactWrapper => {
-        contactWrapper.querySelector('.contact').value = '';
-      });
-
-      // Закрытие модального окна после успешного добавления
-      const modalAddClient = document.getElementById("modalWindowAdd");
-      modalAddClient.classList.remove('show');
-      removeActiveStatus();
-      removeEmptyContacts();
+        const contacts = validateContacts(contactsWrapper, errorAdd);
+        await submitClientData({ surname, name, lastName: lastname, contacts });
+        resetFormAndUI(contactsWrapper);
     } catch (error) {
-      errorAdd.textContent = `Ошибка: ${error.message}`;
-      errorAdd.style.display = 'block';
-      console.error('Ошибка:', error);
+        handleFormError(error, errorAdd);
     }
   });
+
+  // Функция для отправки данных клиента на сервер
+  async function submitClientData(clientData) {
+    const response = await fetch(`${API_BASE_URL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData),
+    });
+
+    if (!response.ok) {
+        throw new Error('Ошибка добавления данных');
+    }
+
+    const data = await response.json();
+    await addClientsToList(data);
+  }
+
+  // Функция для очистки формы и интерфейса после отправки данных
+  function resetFormAndUI(contactsWrapper) {
+    document.getElementById('surnameAdd').value = '';
+    document.getElementById('nameAdd').value = '';
+    document.getElementById('lastnameAdd').value = '';
+    document.getElementById('errorModalAdd').style.display = 'none';
+
+    contactsWrapper.forEach(contactWrapper => {
+        contactWrapper.querySelector('.contact').value = '';
+    });
+
+    const modalAddClient = document.getElementById('modalWindowAdd');
+    modalAddClient.classList.remove('show');
+    removeActiveStatus();
+    removeEmptyContacts();
+  }
+
+  // Функция для обработки ошибок формы
+  function handleFormError(error, errorAdd) {
+    errorAdd.textContent = `Ошибка: ${error.message}`;
+    errorAdd.style.display = 'block';
+    console.error('Ошибка:', error);
+  }
+
+  //************************************/
 
   /* Функция удаления клиентов */
   async function deleteClient(id) {
     try {
-      const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
         method: 'DELETE',
       });
 
@@ -230,106 +279,163 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loadClients();
   }
+
+   //************************************/
 /* Функция изменения клиента */
+
+ // Функция для изменения данных клиента
   async function changeClient() {
-    const id = document.getElementById('idChange').innerHTML.split(' ')[1];
-    let surnameChange = capitalizeFirstLetter(document.getElementById('surnameChange').value.trim());
-    let nameChange = capitalizeFirstLetter(document.getElementById('nameChange').value.trim());
-    let lastnameChange = capitalizeFirstLetter(document.getElementById('lastnameChange').value.trim());
+    const id = extractClientId();
+    const { surname, name, lastname } = getClientNameInputs();
     const errorChange = document.getElementById('errorModalChange');
     const contactsWrapper = document.querySelectorAll('.contacts__list--change .contact__wrapper');
 
-    const surnameInputChange = document.getElementById('surnameChange');
-    const nameInputChange = document.getElementById('nameChange');
-    const lastnameInputChange = document.getElementById('lastnameChange');
-
-    surnameInputChange.classList.remove('input--error');
-    nameInputChange.classList.remove('input--error');
-    lastnameInputChange.classList.remove('input--error');
+    clearInputErrors();
 
     try {
-      // Проверка имени, фамилии и отчества
-      validateName(surnameChange, nameChange, lastnameChange, surnameInputChange, nameInputChange, lastnameInputChange, errorChange);
+        validateClientData(surname, name, lastname, errorChange);
+        const updatedContacts = validateContacts(contactsWrapper, errorChange);
+        await updateClientData(id, { surname, name, lastName: lastname, contacts: updatedContacts });
+        closeChangeModal();
+        loadClients();
 
-      // Проверка контактов
-      const updatedContacts = validateContacts(contactsWrapper, errorChange);
-
-      const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          surname: surnameChange,
-          name: nameChange,
-          lastName: lastnameChange,
-          contacts: updatedContacts // Добавляем обновленные контакты в тело запроса
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при обновлении данных');
-      }
-
-      // Если запрос выполнен успешно, загружаем обновленный список клиентов
-      loadClients();
-
-      // Закрываем модальное окно после успешного обновления
-      const modalChange = document.getElementById("modalWindowChange");
-      modalChange.classList.remove('show');
     } catch (error) {
-      console.error('Ошибка при обновлении данных:', error);
-      errorChange.textContent = `Ошибка: ${error.message}`;
-      errorChange.style.display = 'block';
+        handleFormError(error, errorChange);
     }
   }
 
-/* Функция задержки поиска */
-function delaySearch(func, delay) {
-  let timeoutId;
-  return function(...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
-  };
-}
+  // Функция для извлечения ID клиента
+  function extractClientId() {
+    const idElement = document.getElementById('idChange');
+    if (!idElement) {
+        throw new Error('Не удалось найти элемент с ID клиента');
+    }
+    return idElement.innerHTML.split(' ')[1];
+  }
 
- // Функция для поиска клиента на сервере
- async function searchClient() {
-  const searchInput = document.getElementById('search').value; // Получаем значение из Input
+  // Функция для получения значений имени, фамилии и отчества клиента
+  function getClientNameInputs() {
+    const surnameInput = document.getElementById('surnameChange');
+    const nameInput = document.getElementById('nameChange');
+    const lastnameInput = document.getElementById('lastnameChange');
 
-  try {
-    const response = await fetch(`http://localhost:3000/api/clients?search=${searchInput}`, {
-      method: 'GET',
+    if (!surnameInput || !nameInput || !lastnameInput) {
+        throw new Error('Не удалось найти один или несколько полей для имени, фамилии или отчества');
+    }
+
+    return {
+        surname: capitalizeFirstLetter(surnameInput.value.trim()),
+        name: capitalizeFirstLetter(nameInput.value.trim()),
+        lastname: capitalizeFirstLetter(lastnameInput.value.trim())
+    };
+  }
+
+  // Функция для очистки ошибок ввода
+  function clearInputErrors() {
+    const inputs = ['surnameChange', 'nameChange', 'lastnameChange'].map(id => document.getElementById(id));
+
+    inputs.forEach(input => {
+        if (input) input.classList.remove('input--error');
+    });
+  }
+
+  // Функция для отправки обновленных данных клиента на сервер
+  async function updateClientData(id, clientData) {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData),
     });
 
     if (!response.ok) {
-      throw new Error('Ошибка поиска клиента');
+        throw new Error('Ошибка при обновлении данных');
     }
-
-    const data = await response.json();
-
-    if (data.length === 0) {
-      // Если клиенты не найдены, выводим сообщение об этом на страницу
-      const noResultsMessage = document.getElementById('noResultsMessage');
-      noResultsMessage.style.display = 'block';
-      list.innerHTML = '';
-    } else {
-      // Если клиенты найдены, скрываем сообщение об отсутствии результатов
-      const noResultsMessage = document.getElementById('noResultsMessage');
-      noResultsMessage.style.display = 'none';
-
-      // Очищаем список перед загрузкой новых данных
-      list.innerHTML = '';
-      // Добавляем найденных клиентов на страницу
-      data.forEach(addClientsToList);
-    }
-
-  } catch (error) {
-    console.error('Ошибка при поиске клиента:', error);
   }
+
+  // Функция для закрытия модального окна изменения клиента
+  function closeChangeModal() {
+    const modalChange = document.getElementById("modalWindowChange");
+    if (!modalChange) {
+        throw new Error('Не удалось найти модальное окно для изменения клиента');
+    }
+    modalChange.classList.remove('show');
+    clearContactInputs();
+  }
+
+  // Функция для обработки ошибок формы
+  function handleFormError(error, errorElement) {
+    console.error('Ошибка при обновлении данных:', error);
+    if (errorElement) {
+        errorElement.textContent = `Ошибка: ${error.message}`;
+        errorElement.style.display = 'block';
+    }
+  }
+
+  // Функция для проверки данных клиента
+  function validateClientData(surname, name, lastname, errorElement) {
+    validateName(surname, name, lastname,
+        document.getElementById('surnameChange'),
+        document.getElementById('nameChange'),
+        document.getElementById('lastnameChange'),
+        errorElement);
+  }
+
+  function clearContactInputs() {
+    const contactsWrapper = document.querySelector('.contacts__list--change');
+    if (contactsWrapper) {
+        contactsWrapper.innerHTML = ''; // Очищаем все добавленные контакты
+    }
 }
 
-  const delaydSearchClient = delaySearch(searchClient, 300);
+   //************************************/
+
+  /* Функция задержки поиска */
+  function delaySearch(func, delay) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
+
+ // Функция для поиска клиента на сервере
+  async function searchClient() {
+    const searchInput = document.getElementById('search').value; // Получаем значение из Input
+
+    try {
+      const response = await fetch(`${API_BASE_URL}?search=${searchInput}`, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка поиска клиента');
+      }
+      const data = await response.json();
+
+      if (data.length === EMPTY_RESULT_COUNT) {
+        // Если клиенты не найдены, выводим сообщение об этом на страницу
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        noResultsMessage.style.display = 'block';
+        list.innerHTML = '';
+      } else {
+        // Если клиенты найдены, скрываем сообщение об отсутствии результатов
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        noResultsMessage.style.display = 'none';
+
+        // Очищаем список перед загрузкой новых данных
+        list.innerHTML = '';
+        // Добавляем найденных клиентов на страницу
+        data.forEach(addClientsToList);
+      }
+
+    } catch (error) {
+      console.error('Ошибка при поиске клиента:', error);
+    }
+  }
+
+  const delaydSearchClient = delaySearch(searchClient, SEARCH_DELAY_MS);
 
   const searchInput = document.getElementById('search');
   searchInput.addEventListener('input', delaydSearchClient);
@@ -343,81 +449,96 @@ function delaySearch(func, delay) {
     return tag;
   }
 
+/************************************/
+function createContactInput(modalElement, container, containerSelector, buttonSelector) {
+  const clientContactWrapper = createContactWrapper();
+  const clientContactType = createDropdown(CONTACT_TYPES);
+  const clientContact = createContactInputField();
+  const deleteButton = createDeleteButton(() => handleDeleteContact(clientContactWrapper, modalElement, containerSelector, buttonSelector));
 
- // Функция для создания инпута контакта
-  function createContactInput(modalElement, container, containerSelector, buttonSelector) {
-    const clientContactWrapper = createElement('div', 'contact__wrapper', '');
-    clientContactWrapper.classList.add('flex');
+  setupContactInputEvents(clientContact, deleteButton);
 
-    const options = ['Телефон', 'Email', 'Vk', 'Facebook', 'Другое'];
-    const clientContactType = document.createElement('div');
-    clientContactType.classList.add('dropdown__wrapper');
+  clientContactWrapper.appendChild(clientContactType);
+  clientContactWrapper.appendChild(clientContact);
+  clientContactWrapper.appendChild(deleteButton);
+  container.appendChild(clientContactWrapper);
 
-    const dropdownButton = document.createElement('div');
-    dropdownButton.classList.add('dropdown__button');
-    dropdownButton.classList.add('type');
-    dropdownButton.textContent = options[0]; // Первое значение по умолчанию
-    clientContactType.appendChild(dropdownButton);
+  checkContactsCount(modalElement, containerSelector, buttonSelector);
+}
 
-    const dropdownList = document.createElement('ul');
-    dropdownList.classList.add('dropdown__list');
-    clientContactType.appendChild(dropdownList);
+function createContactWrapper() {
+  const wrapper = createElement('div', 'contact__wrapper', '');
+  wrapper.classList.add('flex');
+  return wrapper;
+}
 
-    options.forEach(option => {
-      const listItem = createElement('li', 'dropdown__item', option);
-      listItem.addEventListener('click', () => {
-        dropdownButton.textContent = option;
-        dropdownList.classList.remove('show');
-      });
-      dropdownList.appendChild(listItem);
+function createDropdown(options) {
+  const dropdownWrapper = document.createElement('div');
+  dropdownWrapper.classList.add('dropdown__wrapper');
+
+  const dropdownButton = document.createElement('div');
+  dropdownButton.classList.add('dropdown__button', 'type');
+  dropdownButton.textContent = options[DROPDOWN_DEFAULT_INDEX]; // Первое значение по умолчанию
+  dropdownWrapper.appendChild(dropdownButton);
+
+  const dropdownList = document.createElement('ul');
+  dropdownList.classList.add('dropdown__list');
+  dropdownWrapper.appendChild(dropdownList);
+
+  options.forEach(option => {
+    const listItem = createElement('li', 'dropdown__item', option);
+    listItem.addEventListener('click', () => {
+      dropdownButton.textContent = option;
+      dropdownList.classList.remove('show');
     });
+    dropdownList.appendChild(listItem);
+  });
 
-    dropdownButton.addEventListener('click', () => {
-      dropdownList.classList.toggle('show');
-      dropdownButton.classList.toggle('open');
-    });
+  dropdownButton.addEventListener('click', () => {
+    dropdownList.classList.toggle('show');
+    dropdownButton.classList.toggle('open');
+  });
 
-    // Создаем input для ввода контакта
-    const clientContact = createElement('input', 'contact', '');
-    clientContact.placeholder = 'Введите данные контакта';
+  return dropdownWrapper;
+}
 
-    // Создаем кнопку удаления контакта
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('contact__delete');
-    const deleteButtonHint = createElement('div', 'button__hint', 'Удалить контакт');
-    deleteButton.appendChild(deleteButtonHint);
-    deleteButton.style.display = 'none'; // Скрываем кнопку удаления по умолчанию
+function createContactInputField() {
+  const input = createElement('input', 'contact', '');
+  input.placeholder = 'Введите данные контакта';
+  return input;
+}
 
-    // Добавляем обработчик события для удаления контакта
-    deleteButton.addEventListener('click', function () {
-      // Удаление контакта из DOM
-      clientContactWrapper.remove();
-      checkContactsCount(modalElement, containerSelector, buttonSelector); // Проверка количества контактов после удаления
-    });
+function createDeleteButton(onClick) {
+  const deleteButton = document.createElement('button');
+  deleteButton.classList.add('contact__delete');
+  const deleteButtonHint = createElement('div', 'button__hint', 'Удалить контакт');
+  deleteButton.appendChild(deleteButtonHint);
+  deleteButton.style.display = 'none'; // Скрываем кнопку удаления по умолчанию
+  deleteButton.addEventListener('click', onClick);
+  return deleteButton;
+}
 
-    // Добавляем обработчик события для ввода данных в поле контакта
-    clientContact.addEventListener('input', function () {
-      // Если в поле контакта есть введенные данные, показываем кнопку удаления
-      if (this.value.trim() !== '') {
-        deleteButton.style.display = 'inline-block';
-        clientContact.classList.add('contact__input');
-        clientContact.style.borderRight = 'none';
-      } else {
-        clientContact.classList.remove('contact__input');
-        clientContact.style.borderRight = '1px solid var(--txt-grey)';
-        deleteButton.style.display = 'none';
-      }
-    });
+function setupContactInputEvents(clientContact, deleteButton) {
+  clientContact.addEventListener('input', function () {
+    if (this.value.trim() !== '') {
+      deleteButton.style.display = 'inline-block';
+      clientContact.classList.add('contact__input');
+      clientContact.style.borderRight = 'none';
+    } else {
+      clientContact.classList.remove('contact__input');
+      clientContact.style.borderRight = '1px solid var(--txt-grey)';
+      deleteButton.style.display = 'none';
+    }
+  });
+}
 
-    clientContactWrapper.appendChild(clientContactType);
-    clientContactWrapper.appendChild(clientContact);
-    clientContactWrapper.appendChild(deleteButton);
-    container.appendChild(clientContactWrapper);
+function handleDeleteContact(wrapper, modalElement, containerSelector, buttonSelector) {
+  wrapper.remove();
+  checkContactsCount(modalElement, containerSelector, buttonSelector);
+}
 
-    checkContactsCount(modalElement, containerSelector, buttonSelector); // Проверка количества контактов после добавления
-  }
-
-  // Функция для удаления пустых contact__wrapper
+//************************************/
+// Функция для удаления пустых contact__wrapper
 
   function removeContacts(modal) {
     const contactsWrapper = modal.querySelectorAll('.contact__wrapper');
@@ -504,30 +625,30 @@ function delaySearch(func, delay) {
     }
 
     // Проверка на пустые значения
-    if (surname.trim().length === 0) {
+    if (surname.trim().length === EMPTY_VALUE) {
       surnameInput.classList.add('input--error');
       errorElement.style.display = 'block';
       throw new Error('Фамилия и имя обязательны к заполнению.');
     }
-    if (name.trim().length === 0) {
+    if (name.trim().length === EMPTY_VALUE) {
       nameInput.classList.add('input--error');
       throw new Error('Фамилия и имя обязательны к заполнению.');
     }
 
     // Проверка на минимальную длину
-    if (surname.trim().length < 2) {
+    if (surname.trim().length < MIN_LENGHT_SYMBOLS) {
       surnameInput.classList.add('input--error');
       errorElement.style.display = 'block';
       throw new Error('Имя, фамилия и отчество не могут быть короче 2х букв.');
     }
 
-    if (name.trim().length < 2) {
+    if (name.trim().length < MIN_LENGHT_SYMBOLS) {
       nameInput.classList.add('input--error');
       errorElement.style.display = 'block';
       throw new Error('Имя, фамилия и отчество не могут быть короче 2х букв.');
     }
 
-    if (lastname.trim().length > 0 && lastname.trim().length < 2) {
+    if (lastname.trim().length > EMPTY_VALUE && lastname.trim().length < MIN_LENGHT_SYMBOLS) {
       lastnameInput.classList.add('input--error');
       errorElement.style.display = 'block';
       throw new Error('Имя, фамилия и отчество не могут быть короче 2х букв.');
@@ -590,101 +711,142 @@ function validateContacts(contactsWrapper, errorElement) {
     const clientItems = document.createElement('div');
     clientItems.classList.add('clients__item', 'flex');
 
+    clientItems.appendChild(createClientId(client.id));
+    clientItems.appendChild(createClientFullName(client));
+    clientItems.appendChild(createClientDate('create', client.createdAt));
+    clientItems.appendChild(createClientDate('change', client.updatedAt));
+    clientItems.appendChild(createContactContainer(client.contacts));
+    clientItems.appendChild(createClientActions(client));
+
+    list.appendChild(clientItems);
+}
+
+function createClientId(id) {
     const clientId = createElement('div', 'clients__id', '');
-    const clientIdSpan = createElement('span', 'clients__grey', client.id);
+    const clientIdSpan = createElement('span', 'clients__grey', id);
     clientId.appendChild(clientIdSpan);
-    clientItems.appendChild(clientId);
+    return clientId;
+}
 
-    const clientFullName = createElement('div', 'clients__name', `${client.surname} ${client.name} ${client.lastName}`);
-    clientItems.appendChild(clientFullName);
+function createClientFullName(client) {
+    return createElement('div', 'clients__name', `${client.surname} ${client.name} ${client.lastName}`);
+}
 
-    const createdAt = new Date(client.createdAt);
-    const formattedCreatedAt = `${createdAt.getDate() < 10 ? '0' : ''}${createdAt.getDate()}.${(createdAt.getMonth() + 1) < 10 ? '0' : ''}${createdAt.getMonth() + 1}.${createdAt.getFullYear()}`;
-    const formattedCreatedAtTime = `${createdAt.getHours() < 10 ? '0' : ''}${createdAt.getHours()}.${createdAt.getMinutes() < 10 ? '0' : ''}${createdAt.getMinutes()}`;
+function createClientDate(type, dateString) {
+    const date = new Date(dateString);
+    const formattedDate = formatDate(date);
+    const formattedTime = formatTime(date);
 
-    const clientDateCreate = createElement('div', 'clients__date', formattedCreatedAt);
-    clientDateCreate.classList.add('clients__date--create');
-    const clientDateCreateTime = createElement('span', 'clients__time', formattedCreatedAtTime);
-    clientDateCreate.appendChild(clientDateCreateTime);
-    clientItems.appendChild(clientDateCreate);
+    const clientDate = createElement('div', 'clients__date', formattedDate);
+    clientDate.classList.add(`clients__date--${type}`);
+    const clientTime = createElement('span', 'clients__time', formattedTime);
+    clientDate.appendChild(clientTime);
 
-    const updatedAt = new Date(client.updatedAt);
-    const formattedUpdatedAt = `${updatedAt.getDate() < 10 ? '0' : ''}${updatedAt.getDate()}.${(updatedAt.getMonth() + 1) < 10 ? '0' : ''}${updatedAt.getMonth() + 1}.${updatedAt.getFullYear()}`;
-    const formattedUpdatedAtTime = `${updatedAt.getHours() < 10 ? '0' : ''}${updatedAt.getHours()}.${updatedAt.getMinutes() < 10 ? '0' : ''}${updatedAt.getMinutes()}`;
+    return clientDate;
+}
 
-    const clientDateChange = createElement('div', 'clients__date', formattedUpdatedAt);
-    clientDateChange.classList.add('clients__date--change');
-    const clientDateChangeTime = createElement('span', 'clients__time', formattedUpdatedAtTime);
-    clientDateChange.appendChild(clientDateChangeTime);
-    clientItems.appendChild(clientDateChange);
+function formatDate(date) {
+    return `${padZero(date.getDate())}.${padZero(date.getMonth() + 1)}.${date.getFullYear()}`;
+}
 
+function formatTime(date) {
+    return `${padZero(date.getHours())}.${padZero(date.getMinutes())}`;
+}
+
+function padZero(number) {
+    return number < 10 ? `0${number}` : number;
+}
+
+function createContactContainer(contacts) {
     const contactContainer = document.createElement('div');
     contactContainer.classList.add('clients__contacts', 'flex');
 
-    client.contacts.forEach(contact => {
-      const contactElement = document.createElement('div');
-      contactElement.classList.add('contact__item');
-
-      const typeElement = document.createElement('span');
-      typeElement.classList.add('contact__type');
-
-      const valueElement = document.createElement('span');
-      valueElement.classList.add('contact__value');
-      valueElement.textContent = contact.type === 'Другое' ? contact.value : `${contact.type}: ${contact.value}`;
-
-      contactElement.appendChild(typeElement);
-      contactElement.appendChild(valueElement);
-
-      const iconElement = document.createElement('i');
-      iconElement.classList.add('contact__icon');
-
-      switch (contact.type) {
-        case 'Телефон':
-          iconElement.classList.add('icon-phone');
-          break;
-        case 'Другое':
-          iconElement.classList.add('icon-additional');
-          break;
-        case 'Email':
-          iconElement.classList.add('icon-email');
-          break;
-        case 'Vk':
-          iconElement.classList.add('icon-vk');
-          break;
-        case 'Facebook':
-          iconElement.classList.add('icon-facebook');
-          break;
-      }
-
-      typeElement.insertBefore(iconElement, typeElement.firstChild);
-      contactContainer.appendChild(contactElement);
-
-      iconElement.addEventListener('mouseenter', function () {
-        valueElement.style.display = 'inline-block';
-      });
-
-      iconElement.addEventListener('mouseleave', function () {
-        valueElement.style.display = 'none';
-      });
+    contacts.forEach(contact => {
+        const contactElement = createContactElement(contact);
+        contactContainer.appendChild(contactElement);
     });
 
-    clientItems.appendChild(contactContainer);
+    return contactContainer;
+}
 
-    const clientButtonts = createElement('div', 'clients__actions', '');
+function createContactElement(contact) {
+    const contactElement = document.createElement('div');
+    contactElement.classList.add('contact__item');
+
+    const typeElement = document.createElement('span');
+    typeElement.classList.add('contact__type');
+
+    const valueElement = createContactValue(contact);
+
+    contactElement.appendChild(typeElement);
+    contactElement.appendChild(valueElement);
+
+    const iconElement = createContactIcon(contact.type);
+    typeElement.insertBefore(iconElement, typeElement.firstChild);
+
+    addHoverEffect(iconElement, valueElement);
+
+    return contactElement;
+}
+
+function createContactValue(contact) {
+    const valueElement = document.createElement('span');
+    valueElement.classList.add('contact__value');
+    valueElement.textContent = contact.type === 'Другое' ? contact.value : `${contact.type}: ${contact.value}`;
+    return valueElement;
+}
+
+function createContactIcon(type) {
+    const iconElement = document.createElement('i');
+    iconElement.classList.add('contact__icon');
+
+    switch (type) {
+        case 'Телефон':
+            iconElement.classList.add('icon-phone');
+            break;
+        case 'Другое':
+            iconElement.classList.add('icon-additional');
+            break;
+        case 'Email':
+            iconElement.classList.add('icon-email');
+            break;
+        case 'Vk':
+            iconElement.classList.add('icon-vk');
+            break;
+        case 'Facebook':
+            iconElement.classList.add('icon-facebook');
+            break;
+    }
+
+    return iconElement;
+}
+
+function addHoverEffect(iconElement, valueElement) {
+    iconElement.addEventListener('mouseenter', () => {
+        valueElement.style.display = 'inline-block';
+    });
+
+    iconElement.addEventListener('mouseleave', () => {
+        valueElement.style.display = 'none';
+    });
+}
+
+function createClientActions(client) {
+    const clientButtons = createElement('div', 'clients__actions', '');
+
     const changesBtn = createElement('button', 'btn', 'Изменить');
     changesBtn.classList.add('btn__reset', 'btn__change');
-    changesBtn.addEventListener('click', async () => windowChangeClient(client.id, client.surname, client.name, client.lastName, client.contacts));
+    changesBtn.addEventListener('click', () => windowChangeClient(client.id, client.surname, client.name, client.lastName, client.contacts));
 
     const deleteBtn = createElement('button', 'btn', 'Удалить');
     deleteBtn.classList.add('btn__reset', 'btn__delete');
     deleteBtn.addEventListener('click', () => openDelWindow(client.id));
 
-    clientButtonts.appendChild(changesBtn);
-    clientButtonts.appendChild(deleteBtn);
-    clientItems.appendChild(clientButtonts);
+    clientButtons.appendChild(changesBtn);
+    clientButtons.appendChild(deleteBtn);
 
-    list.appendChild(clientItems);
-  }
+    return clientButtons;
+}
 
   /* Сортировки */
 
