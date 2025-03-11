@@ -31,4 +31,4 @@ npm install
 
 ### Стек технологий
 
-`1.` JavaScript — язык программирования проекта.
+JavaScript
